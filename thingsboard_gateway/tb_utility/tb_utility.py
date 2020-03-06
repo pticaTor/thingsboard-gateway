@@ -18,7 +18,7 @@ from importlib import util
 from logging import getLogger
 from simplejson import dumps, loads
 from re import search, match, compile
-
+from objectpath import *
 
 log = getLogger("service")
 
@@ -120,6 +120,35 @@ class TBUtility:
             if full_value is None:
                 log.error('Value is None - Cannot find the pattern: %s in %s. Expression will be interpreted as value.', target_str, dumps(body))
                 full_value = expression
+        except Exception as e:
+            log.error(e)
+            return None
+        return full_value
+
+    @staticmethod
+    def get_path_value(expression, body={}, value_type="string", get_tag=False):
+        if isinstance(body, str):
+            body = loads(body)
+        if not expression:
+            return ''
+        tree = Tree(body)
+        full_value = tree.execute(expression)
+        return full_value
+
+    @staticmethod
+    def get_path_value_test(expression, body={}, value_type="string", get_tag=False):
+        if isinstance(body, str):
+            body = loads(body)
+        if not expression:
+            return ''
+        full_value = None
+        try:
+            jsonpath_expr = parse(expression)
+            match = jsonpath_expr.find(body)
+            if match is None or len(match) == 0:
+                log.error('Value is None - Cannot find the json path: %s in %s. Expression will be interpreted as value.', expression, dumps(body))
+                return None
+            full_value = match[0].value
         except Exception as e:
             log.error(e)
             return None

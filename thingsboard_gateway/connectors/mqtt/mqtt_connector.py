@@ -20,6 +20,7 @@ import ssl
 from paho.mqtt.client import Client
 from thingsboard_gateway.connectors.connector import Connector, log
 from thingsboard_gateway.connectors.mqtt.json_mqtt_uplink_converter import JsonMqttUplinkConverter
+from thingsboard_gateway.connectors.mqtt.jsonpath_mqtt_uplink_converter import JsonPathMqttUplinkConverter
 from threading import Thread
 from thingsboard_gateway.tb_utility.tb_utility import TBUtility
 from simplejson import loads
@@ -155,6 +156,8 @@ class MqttConnector(Connector, Thread):
                                 self.__log.error("\n\nCannot find extension module for %s topic.\n\Please check your configuration.\n", mapping["topicFilter"])
                         except Exception as e:
                             self.__log.exception(e)
+                    elif mapping["converter"]["type"] == "jsonpath":
+                        converter = JsonPathMqttUplinkConverter(mapping)
                     else:
                         converter = JsonMqttUplinkConverter(mapping)
                     if converter is not None:
