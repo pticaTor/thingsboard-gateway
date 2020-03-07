@@ -10,7 +10,7 @@ COPY thingsboard_gateway/config /app/config
 WORKDIR /app
 RUN mkdir -p /app/logs
 
-ENV configs /app/config
+ENV configs /app/thingsboard_gateway/config
 ENV extensions /app/thingsboard_gateway/extensions
 ENV logs /app/logs
 ENV PYTHONPATH "${PYTHONPATH}:/app"
