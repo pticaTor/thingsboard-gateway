@@ -9,6 +9,7 @@ COPY thingsboard_gateway /app/thingsboard_gateway
 COPY thingsboard_gateway/config /app/config
 WORKDIR /app
 RUN mkdir -p /app/logs
+RUN rm /app/thingsboard_gateway/config/*
 
 ENV configs /app/thingsboard_gateway/config
 ENV extensions /app/thingsboard_gateway/extensions
