@@ -133,6 +133,13 @@ class TBUtility:
             return ''
         tree = Tree(body)
         full_value = tree.execute(expression)
+        if full_value is None:
+            return None
+        if value_type == "string":
+            if type(full_value) not in STR_TYPES:
+                return None
+        elif type(full_value) not in NUM_TYPES:
+                return None
         return full_value
 
     @staticmethod
